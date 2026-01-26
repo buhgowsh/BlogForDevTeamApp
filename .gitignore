@@ -1,2 +1,11 @@
 # environment variables
 .env
+
+# folders that i dont work in or have important files in
+.svelte-kit/
+
+# node_modules/
+# node_modules/.package-lock.json
+
+# database test file
+test.db
