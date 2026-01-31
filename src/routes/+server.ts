@@ -1,7 +1,7 @@
 // this file contains all the code related to apis in this project
 import '$lib/types';
 import type { Express, Request, Response } from 'express';
-const DISCORD_ID="527717014324903947" // this should probably be an environment variable, but it isnt that important to keep secret
+const DISCORD_ID="527717014324903947" // this should probably be an environment variable, but this gets loaded in the client so i would need to encrypt it
 
 // use lanyard to get all the information i need from my discord profile
 export async function _getDiscordInfo() {

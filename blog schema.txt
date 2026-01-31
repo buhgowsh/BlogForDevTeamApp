@@ -1,0 +1,22 @@
+/* i don't think it's very smart to publicly reveal the schema of the database (for security reasons), but since this is only for an application i want to show
+    what i used so it can be evaluated */
+
+-- each table has it's own autoincrementing field known as "rowid" (sqlite specific), but it doesn't work nicely as primary/foreign keys
+CREATE TABLE Posts (
+    PostID INTEGER PRIMARY KEY, -- this acts as an alias for rowid (there are still three other ways to reference this as rowid if you really want to: ROWID, _ROWID_, OID)
+    PostWords TEXT NOT NULL,
+    Author TEXT DEFAULT "Anonymous",
+    PostDate TEXT NOT NULL,
+    Likes INTEGER DEFAULT 0
+);
+
+
+CREATE TABLE Comments (
+    CommentID INTEGER PRIMARY KEY, -- this acts as an alias for rowid (there are still three other ways to reference this as rowid if you really want to: ROWID, _ROWID_, OID)
+    PostID INTEGER NOT NULL,
+    CommentWords TEXT NOT NULL,
+    Author TEXT DEFAULT "Anonymous",
+    Likes INTEGER DEFAULT 0,
+    CommentDate TEXT NOT NULL,
+    FOREIGN KEY (PostID) REFERENCES Posts(PostID) ON DELETE CASCADE
+);

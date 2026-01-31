@@ -7,4 +7,4 @@
 node_modules/
 
 # database test file
-test.db
+blog.db
