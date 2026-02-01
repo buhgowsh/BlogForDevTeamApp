@@ -10,7 +10,7 @@ import { DatabaseSync } from 'node:sqlite';
 import { setApp } from './api.js';
 
 dotenv.config();
-const PORT = process.env.PORT | 3000;
+const PORT = process.env.PORT;
 
 // start up cors
 const app = express();

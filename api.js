@@ -11,7 +11,8 @@ export const setApp = function (app, db) {
 
         // make sure something was passed to the endpoint
         if(!req.body) {
-            return res.status(400).json({ error: "Post API called but no body provided" }); // using return to end early
+            console.error("Post API called but no body provided");
+            return res.status(400).json({ id: -1, error: "Post API called but no body provided" }); // using return to end early
         }
 
         // get the data sent from the request body
@@ -20,6 +21,7 @@ export const setApp = function (app, db) {
 
         // verify data was actually sent
         if(!words) {
+            console.error("Post API called but data was not given");
             return res.status(400).json({ id: -1, error: "Post API called but data was not given" }); // using return to end early
         }
 
@@ -48,6 +50,7 @@ export const setApp = function (app, db) {
 
             // return the id of the post/comment
             res.status(200).json({ id: pid.PostID, error: '' });
+
         } catch(e) {
             console.log("Error with Posts API")
             res.status(500).json({ id: -1, error: e });
@@ -59,6 +62,7 @@ export const setApp = function (app, db) {
 
         // make sure something was passed to the endpoint
         if(!req.body) {
+            console.error("Comment API called but no body provided");
             return res.status(400).json({ error: "Comment API called but no body provided" }); // using return to end early
         }
 
@@ -68,6 +72,7 @@ export const setApp = function (app, db) {
 
         // verify the needed data was sent
         if(!words || typeof pid !== "number") {
+            console.error("Comment API called but not enough data was given");
             return res.status(400).json({ error: "Comment API called but not enough data was given" }); // using return to end early
         }
 
@@ -86,6 +91,7 @@ export const setApp = function (app, db) {
 
             // return empty error to indicate success (no real need to return anything from here)
             res.status(200).json({ error: '' });
+
         } catch(e) {
             console.log("Error with Comment API");
             res.status(500).json({ error: e });
@@ -93,10 +99,11 @@ export const setApp = function (app, db) {
     });
 
     // add a like or dislike to a post/comment
-    app.post('/api/like', async (req, res) => {
+    app.post('/api/like/', async (req, res) => {
 
         // make sure something was passed to the endpoint
         if(!req.body) {
+            console.error("Like API called but no body provided");
             return res.status(400).json({ error: "Like API called but no body provided" }); // using return to end early
         }
 
@@ -107,23 +114,15 @@ export const setApp = function (app, db) {
 
         // ensure all the needed data was given
         if(typeof engagement !== "number" || typeof type !== "number" || typeof id !== "number") {
+            console.error("Like API called but not enough values given");
             return res.status(400).json({ error: "Like API called but not enough values given" }); // using return to end early
         }
 
         try {
             // change the values of likes on either the post or the comment
             if(type) {
-                // get the current number of likes on the post/comment
-                const likes = db.prepare('SELECT Likes FROM Posts WHERE PostID=?').get(id);
-                const newLikes = likes.Likes + engagement;
-
-                // update the record to have the new value
-                const pid = db.prepare('UPDATE Posts SET Likes=? WHERE PostID=?').get(newLikes, id);
-
-                // return the id of the post/comment
-                res.status(200).json({ id:pid.PostID, newLikes: newLikes, error: '' });
-            } else {
-                // get the current number of likes on the post
+                // comment
+                // get the current number of likes on the comment
                 const likes = db.prepare('SELECT Likes FROM Comments WHERE CommentID=?').get(id);
                 const newLikes = likes.Likes + engagement;
 
@@ -131,12 +130,22 @@ export const setApp = function (app, db) {
                 const cid = db.prepare('UPDATE Comments SET Likes=? WHERE CommentID=?').get(newLikes, id);
 
                 // return the id of the comment
-                res.status(200).json({ id:cid.CommentID, newLikes: newLikes, error: '' });
+                res.status(200).json({ newLikes: newLikes, error: '' });
+            } else {
+                // post
+                // get the current number of likes on the post
+                const likes = db.prepare('SELECT Likes FROM Posts WHERE PostID=?').get(id);
+                const newLikes = likes.Likes + engagement;
+
+                // update the record to have the new value
+                const pid = db.prepare('UPDATE Posts SET Likes=? WHERE PostID=?').get(newLikes, id);
+
+                // return the id of the post/comment
+                res.status(200).json({ newLikes: newLikes, error: '' });
             }
             
-            
         } catch(e) {
-            console.log("Error with Like API");
+            console.error("Error with Like API");
             res.status(500).json({ error: e });
         }
     });
@@ -150,7 +159,9 @@ export const setApp = function (app, db) {
             const posts = db.prepare('SELECT * FROM Posts').all();
 
             res.status(200).json({ posts: posts, error: '' });
+
         } catch(e) {
+            console.error("Error with Get Posts API");
             res.status(500).json({ error: e });
         }
     });
@@ -166,7 +177,7 @@ export const setApp = function (app, db) {
 
         // make sure a number was passed through
         if(typeof id !== "number") {
-            console.log("Get Comments API called but no PostID given");
+            console.error("Get Comments API called but no PostID given");
             return res.status(500).json({ error: "Get Comments API called but no PostID given" });
         }
 
@@ -176,8 +187,9 @@ export const setApp = function (app, db) {
             const comments = db.prepare('SELECT * FROM Comments WHERE PostID=?').all(id);
 
             res.status(200).json({ comments: comments, error: '' });
+
         } catch(e) {
-            console.log("Error with Get Comments API")
+            console.error("Error with Get Comments API");
             res.status(500).json({ error: e });
         }
     });

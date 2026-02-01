@@ -1,1 +1,287 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+@plugin 'daisyui';
+
+/* Define theme variables for DaisyUI */
+:root {
+  --color-primary: #70486B;
+  --color-primary-content: #ffffff;
+  --color-secondary: #040B10; /* New darker black */
+  --color-secondary-content: #ffffff;
+  --color-accent: #9B6F97;
+  --color-accent-content: #ffffff;
+  --color-neutral: #0A1219; /* Slightly lighter for contrast */
+  --color-neutral-content: #e2e8f0;
+  --color-base-100: #040B10; /* Main background */
+  --color-base-200: #0A1219; /* Card backgrounds */
+  --color-base-300: #121E28; /* Borders and hover states */
+  --color-base-content: #e2e8f0; /* Text color */
+}
+
+/* Apply DaisyUI dark theme with your colors */
+@plugin "daisyui/theme" {
+  name: "dark";
+  default: true;
+  prefersdark: false;
+  color-scheme: dark;
+  --b1: var(--color-base-100);
+  --b2: var(--color-base-200);
+  --b3: var(--color-base-300);
+  --bc: var(--color-base-content);
+  
+  --p: var(--color-primary);
+  --pc: var(--color-primary-content);
+  
+  --s: var(--color-secondary);
+  --sc: var(--color-secondary-content);
+  
+  --a: var(--color-accent);
+  --ac: var(--color-accent-content);
+  
+  --n: var(--color-neutral);
+  --nc: var(--color-neutral-content);
+}
+
+/* Tailwind v4 custom theme extensions */
+@theme {
+  /* Custom colors */
+  --color-purple: #70486B;
+  --color-purple-light: #9B6F97;
+  --color-purple-dark: #5a3a56;
+  --color-black: #040B10;
+  --color-black-light: #0A1219;
+  --color-black-dark: #020609;
+  
+  /* Border radius */
+  --radius-lg: 0.75rem;
+  --radius-md: 0.5rem;
+  --radius-sm: 0.25rem;
+}
+
+/* Base styles */
+@layer base {
+  html, body {
+    @apply bg-black text-base-content;
+    min-height: 100vh;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  /* Custom color utilities */
+  .bg-black {
+    background-color: #040B10;
+  }
+  
+  .bg-black-light {
+    background-color: #0A1219;
+  }
+  
+  .text-purple {
+    color: #70486B;
+  }
+  
+  .bg-purple {
+    background-color: #70486B;
+  }
+  
+  .border-purple {
+    border-color: #70486B;
+  }
+}
+
+/* Component styles */
+@layer components {
+  /* Custom button variants */
+  .btn-purple {
+    @apply bg-purple hover:bg-purple-dark text-white border-purple;
+  }
+  
+  .btn-black {
+    @apply bg-black hover:bg-black-dark text-white border-black;
+  }
+  
+  /* Card with custom shadow */
+  .card-custom {
+    @apply bg-base-200 border border-base-300 rounded-box shadow-lg;
+  }
+  
+  /* Badge with purple accent */
+  .badge-purple {
+    @apply bg-purple border-purple text-white;
+  }
+  
+  /* Gradient backgrounds */
+  .gradient-purple {
+    background: linear-gradient(135deg, #70486B 0%, #9B6F97 100%);
+  }
+  
+  .gradient-black {
+    background: linear-gradient(135deg, #091620 0%, #0d1f2e 100%);
+  }
+}
+
+/* Utility styles */
+@layer utilities {
+  /* Animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  /* Text gradient */
+  .text-gradient-purple {
+    background: linear-gradient(135deg, #70486B 0%, #9B6F97 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  /* Scrollbar styling */
+  .scrollbar-custom {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-purple) var(--color-base-200);
+  }
+  
+  .scrollbar-custom::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .scrollbar-custom::-webkit-scrollbar-track {
+    background: var(--color-base-200);
+    border-radius: 4px;
+  }
+  
+  .scrollbar-custom::-webkit-scrollbar-thumb {
+    background: var(--color-purple);
+    border-radius: 4px;
+  }
+  
+  .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+    background: var(--color-purple-dark);
+  }
+}
+
+/* Additional styles for compact design */
+
+/* Compact card styling */
+.card {
+  @apply rounded-lg;
+}
+
+.card-body {
+  @apply p-4;
+}
+
+/* Small button styling */
+.btn-xs {
+  @apply h-6 min-h-6 px-2 text-xs;
+}
+
+/* Status badge */
+.badge-primary {
+  @apply bg-purple border-purple text-white;
+}
+
+/* Text utilities */
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+/* Avatar sizes */
+.avatar {
+  &.placeholder {
+    .text-xs {
+      font-size: 0.75rem;
+    }
+  }
+}
+
+/* Post content styling */
+.whitespace-pre-line {
+  white-space: pre-line;
+}
+
+/* Divider styling */
+.h-4.w-px {
+  height: 1rem;
+  width: 1px;
+}
+
+/* Form styling for compact modal */
+.modal {
+  @apply p-4;
+  
+  .card {
+    @apply max-w-2xl;
+  }
+}
+
+/* Status indicator colors */
+.bg-green-500 { background-color: #10b981; }
+.bg-yellow-500 { background-color: #f59e0b; }
+.bg-red-500 { background-color: #ef4444; }
+.bg-gray-500 { background-color: #6b7280; }
+
+.badge-success {
+  @apply bg-green-500/20 text-green-400 border-green-500/20;
+}
+
+.badge-neutral {
+  @apply bg-gray-500/20 text-gray-400 border-gray-500/20;
+}
+
+/* Purple color utilities */
+.bg-purple {
+  background-color: #70486B;
+}
+
+.bg-purple-dark {
+  background-color: #5a3a56;
+}
+
+.border-purple {
+  border-color: #70486B;
+}
+
+.text-purple {
+  color: #70486B;
+}
+
+.hover\:bg-purple-dark:hover {
+  background-color: #5a3a56;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .container {
+    @apply px-3;
+  }
+  
+  .card-body {
+    @apply p-3;
+  }
+  
+  .flex-col-mobile {
+    @apply flex-col;
+  }
+  
+  .space-y-4 {
+    > * + * {
+      margin-top: 1rem;
+    }
+  }
+}
